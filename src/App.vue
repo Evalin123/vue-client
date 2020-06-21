@@ -1,12 +1,34 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div>
+      <!-- <h1>MyInput</h1>
+      <a href="https://www.w3schools.com">Visit W3Schools.com!</a>
+
+      <MyInput msg="Email"></MyInput>
+      <MyInput msg="Password"></MyInput> -->
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
+
+<script>
+import Test from '@/components/Test.vue'
+import MyInput from '@/components/MyInput.vue'
+
+export default {
+  name : 'app',
+  data() {
+    return {
+      test : 'abc',
+      test2 : 'def',
+    }
+  },
+  components: {
+    Test,
+    MyInput
+  } 
+}
+</script>
 
 <style>
 #app {

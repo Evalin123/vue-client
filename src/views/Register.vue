@@ -1,10 +1,6 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <Test/>
-    <Test/>
-    <Test/>
-    <Test/>
+  <div class="register">
+    <h1>Register</h1>
   </div>
 </template>
 
@@ -14,7 +10,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import Test from '@/components/Test.vue'
 
 export default {
-  name: 'home',
+  name: 'register',
   components: {
     Test
   }
