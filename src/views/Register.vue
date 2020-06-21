@@ -9,7 +9,7 @@
           :rules="rules"
           ref="registerUser"
           label-width="100px"
-          class="demo-ruleForm"
+          class="registerForm"
         >
           <el-form-item label="名稱" prop="name">
             <el-input type="text" v-model="registerUser.name" placeholder="名稱"></el-input>
@@ -135,4 +135,40 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style scoped>
+  .register {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+  }
+
+  .form_container {
+    width: 370px;
+    height: 210px;
+    position: absolute;
+    top: 10%;
+    left: 34%;
+    padding: 25px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .form_container .manage_tip .title {
+    font-weight: bold;
+    font-size: 26px;
+    color: #fff;
+  }
+
+  .registerForm {
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px 40px 20px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px #cccc;
+  }
+
+  .submit_btn {
+    width: 100%;
+  }
+</style>
