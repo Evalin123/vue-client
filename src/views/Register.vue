@@ -7,7 +7,7 @@
           :model="registerUser"
           status-icon
           :rules="rules"
-          ref="registerUser"
+          ref="registerForm"
           label-width="100px"
           class="registerForm"
         >
@@ -25,6 +25,9 @@
           </el-form-item>
           <el-form-item label="Description" prop="description">
             <el-input type="text" v-model="registerUser.description" placeholder="Description"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="submit_btn" @click = "submitForm('registerForm')">Submit</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -119,6 +122,7 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      console.log(formName)
       this.$refs[formName].validate(valid => {
         if (valid) {
           alert("submit!");
