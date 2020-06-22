@@ -27,7 +27,7 @@
             <el-input type="text" v-model="registerUser.description" placeholder="Description"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click = "submitForm('registerForm')">Submit</el-button>
+            <el-button type="primary" class="submit_btn" @click="submitForm('registerForm')">Submit</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -57,19 +57,17 @@ export default {
     const checkPassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error("密碼需大於6碼"));
-      }
-      else {
+      } else {
         callback();
       }
-    }
+    };
     const checkPassword2 = (rule, value, callback) => {
       if (value != this.registerUser.password) {
         callback(new Error("密碼不一致"));
-      }
-      else {
+      } else {
         callback();
       }
-    }
+    };
     return {
       registerUser: {
         name: "",
@@ -101,8 +99,8 @@ export default {
             trigger: "blur"
           },
           {
-            validator : checkPassword,
-            trigger : "blur"
+            validator: checkPassword,
+            trigger: "blur"
           }
         ],
         password2: [
@@ -112,20 +110,29 @@ export default {
             trigger: "blur"
           },
           {
-            validator : checkPassword2,
-            trigger : "blur"
+            validator: checkPassword2,
+            trigger: "blur"
           }
         ],
-        description: [],
+        description: []
       }
     };
   },
   methods: {
     submitForm(formName) {
-      console.log(formName)
+      console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.$axios
+            .post("http://localhost:5000/api/users/register", this.registerUser)
+            .then(response => {
+              console.log(response);
+              if (response.data.status == "error") {
+                this.$message({ message: response.data.msg, type: "error" });
+              } else {
+                this.$message({ message: "註冊成功", type: "success" });
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -140,39 +147,39 @@ export default {
 </script>
 
 <style scoped>
-  .register {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-size: 100% 100%;
-  }
+.register {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+}
 
-  .form_container {
-    width: 370px;
-    height: 210px;
-    position: absolute;
-    top: 10%;
-    left: 34%;
-    padding: 25px;
-    border-radius: 5px;
-    text-align: center;
-  }
+.form_container {
+  width: 370px;
+  height: 210px;
+  position: absolute;
+  top: 10%;
+  left: 34%;
+  padding: 25px;
+  border-radius: 5px;
+  text-align: center;
+}
 
-  .form_container .manage_tip .title {
-    font-weight: bold;
-    font-size: 26px;
-    color: #fff;
-  }
+.form_container .manage_tip .title {
+  font-weight: bold;
+  font-size: 26px;
+  color: #fff;
+}
 
-  .registerForm {
-    margin-top: 20px;
-    background-color: #fff;
-    padding: 20px 40px 20px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px #cccc;
-  }
+.registerForm {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px 40px 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px #cccc;
+}
 
-  .submit_btn {
-    width: 100%;
-  }
+.submit_btn {
+  width: 100%;
+}
 </style>
