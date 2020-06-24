@@ -32,18 +32,6 @@
         </el-form>
       </div>
     </section>
-    <!-- <h1>Register</h1>
-    <label for="name">Name</label>
-    <input type="text" id = "name"/><br>
-    
-    <label for="email">Email</label>
-    <input type="text" id = "email"/><br>
-    
-    <label for="password">Password</label>
-    <input type="password" id = "password"/><br>
-    
-    <label for="description">Description</label>
-    <input type="text" id = "description"/>-->
   </div>
 </template>
 
@@ -89,7 +77,12 @@ export default {
           {
             required: true,
             message: "不能為空",
-            trigger: "blur"
+            trigger: "blur",
+          },
+          {
+            type : "email",
+            message : "Email格式錯誤",
+            trigger : "blur",
           }
         ],
         password: [
@@ -124,7 +117,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
-            .post("http://localhost:5000/api/users/register", this.registerUser)
+            .post("/api/users/register", this.registerUser)
             .then(response => {
               console.log(response);
               if (response.data.status == "error") {
@@ -151,6 +144,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  background: url(../assets/registerBackground.jpg) no-repeat center center;
   background-size: 100% 100%;
 }
 
