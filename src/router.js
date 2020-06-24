@@ -9,7 +9,7 @@ import Page404 from './views/404.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -40,3 +40,20 @@ export default new Router({
     },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const isLogin = localStorage.jwtToken ? true : false
+  if(to.path == '/login' || to.path == '/register') {
+    next();
+  }
+  else {
+    if(isLogin) {
+      next();
+    }
+    else {
+      next('/login');
+    }
+  }
+})
+
+export default router;

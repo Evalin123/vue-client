@@ -18,6 +18,9 @@ function endLoading() {
 
 axios.interceptors.request.use(request => {
   startLoading();
+  if(localStorage.jwtToken) {
+    request.headers.Authorization = localStorage.jwtToken
+  }
   return request;
 },error => {
   return Promise.reject(error);

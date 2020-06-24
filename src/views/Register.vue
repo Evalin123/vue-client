@@ -124,6 +124,7 @@ export default {
                 this.$message({ message: response.data.msg, type: "error" });
               } else {
                 this.$message({ message: "註冊成功", type: "success" });
+                this.$router.push('/login');
               }
             });
         } else {

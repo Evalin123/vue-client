@@ -18,8 +18,11 @@
             <el-input type="password" v-model="loginUser.password" placeholder="Password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="submitForm('loginForm')">Submit</el-button>
+            <el-button type="primary" class="submit_btn" @click="submitForm('loginForm')">登入</el-button>
           </el-form-item>
+          <div class="tiparea">
+            <p>沒有帳號,現在<router-link to = "/register">註冊</router-link></p>
+          </div>
         </el-form>
       </div>
     </section>
@@ -69,6 +72,8 @@ export default {
                 this.$message({ message: response.data.msg, type: "error" });
               } else {
                 this.$message({ message: "登入成功", type: "success" });
+                console.log(response.data.token)
+                localStorage.setItem("jwtToken", response.data.token)
               }
             });
         } else {
