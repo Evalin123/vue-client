@@ -6,6 +6,7 @@ import About from './views/About.vue'
 import Register from './views/Register.vue'
 import Login from './views/Login.vue'
 import Page404 from './views/404.vue'
+import EditUser from './views/EditUser'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ const router = new Router({
       path : '/login',
       name :'login',
       component : Login
+    },
+    {
+      path : '/edit',
+      name :'edit',
+      component : EditUser
     },
     {
       path : '*',
