@@ -2,14 +2,14 @@
   <div class="edit">
     <section class="form_container">
       <div class="manage_tip">
-        <span class="title">註冊頁</span>
+        <span class="title">編輯頁</span>
         <el-form
           :model="editUser"
           status-icon
           :rules="rules"
           ref="editForm"
           label-width="100px"
-          class="registerForm"
+          class="editForm"
         >
           <el-form-item label="名稱" prop="name">
             <el-input type="text" v-model="editUser.name" placeholder="名稱"></el-input>
@@ -18,7 +18,7 @@
             <el-input type="text" v-model="editUser.description" placeholder="Description"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="submitForm('registerForm')">Submit</el-button>
+            <el-button type="primary" class="submit_btn" @click="submitForm('editForm')">Submit</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -34,7 +34,8 @@ export default {
     return {
       editUser: {
         name: "",
-        description: ""
+        description: "",
+        id : "",
       },
       rules: {
         name: [
@@ -45,7 +46,8 @@ export default {
           },
           { min: 2, max: 8, message: "字數錯誤", trigger: "blur" }
         ],
-        description: []
+        description: [],
+        id: [],
       }
     };
   },
@@ -56,6 +58,8 @@ export default {
       .then(response => {
         console.log(response);
         this.editUser.name = response.data.name;
+        this.editUser.description = response.data.description;
+        this.editUser.id = response.data._id;
       });
   },
   methods: {
@@ -64,14 +68,13 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
-            .post("/api/users/register", this.registerUser)
+            .post('/api/users/edit/' + this.editUser.id + '/', this.editUser)
             .then(response => {
               console.log(response);
               if (response.data.status == "error") {
                 this.$message({ message: response.data.msg, type: "error" });
               } else {
-                this.$message({ message: "註冊成功", type: "success" });
-                // this.$router.push('/login');
+                this.$message({ message: response.data.message, type: "success" });
               }
             });
         } else {
@@ -88,7 +91,7 @@ export default {
 </script>
 
 <style scoped>
-.register {
+.editUser {
   position: relative;
   width: 100%;
   height: 100%;
@@ -112,7 +115,7 @@ export default {
   color: #fff;
 }
 
-.registerForm {
+.editForm {
   margin-top: 20px;
   background-color: #fff;
   padding: 20px 40px 20px 20px;

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <el-button type="primary" class="logout_btn" @click="logout()">Logout</el-button>
     <router-view/>
   </div>
 </template>
@@ -14,6 +15,12 @@ export default {
     return {
       test : 'abc',
       test2 : 'def',
+    }
+  },
+  methods : {
+    logout() {
+      localStorage.removeItem("jwtToken");
+      location.reload();
     }
   },
   components: {

@@ -35,7 +35,7 @@ const router = new Router({
       component : Login
     },
     {
-      path : '/edit',
+      path : '/edit/',
       name :'edit',
       component : EditUser
     },
