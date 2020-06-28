@@ -31,6 +31,7 @@
 
 <script>
 // @ is an alias to /src
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: "login",
@@ -72,8 +73,12 @@ export default {
                 this.$message({ message: response.data.msg, type: "error" });
               } else {
                 this.$message({ message: "登入成功", type: "success" });
-                console.log(response.data.token)
-                localStorage.setItem("jwtToken", response.data.token)
+                console.log(response.data.token);
+                localStorage.setItem("jwtToken", response.data.token);
+                const decoded = jwt_decode(response.data.token);
+                console.log(decoded);
+                this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decoded));
+                this.$store.dispatch("setUser", decoded);
               }
             });
         } else {
@@ -81,6 +86,14 @@ export default {
           return false;
         }
       });
+    },
+    isEmpty(value) {
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === "object" && Object.keys(value).length === 0) ||
+        (typeof value === "string" && value.trim().length === 0)
+      );
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

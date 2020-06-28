@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <el-button type="primary" class="logout_btn" @click="logout()">Logout</el-button>
+    <!-- <el-button type="primary" class="logout_btn" @click="logout()">Logout</el-button> -->
+    <HeadNav/>
     <router-view/>
   </div>
 </template>
@@ -8,6 +9,8 @@
 <script>
 import Test from '@/components/Test.vue'
 import MyInput from '@/components/MyInput.vue'
+import HeadNav from '@/components/HeadNav.vue'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name : 'app',
@@ -17,15 +20,31 @@ export default {
       test2 : 'def',
     }
   },
+  created : function() {
+    if(localStorage.jwtToken) {
+      const decoded = jwt_decode(localStorage.jwtToken);
+      this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decoded));
+      this.$store.dispatch("setUser", decoded);
+    }
+  },
   methods : {
     logout() {
       localStorage.removeItem("jwtToken");
       location.reload();
-    }
+    },
+    isEmpty(value) {
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === "object" && Object.keys(value).length === 0) ||
+        (typeof value === "string" && value.trim().length === 0)
+      );
+    },
   },
   components: {
     Test,
-    MyInput
+    MyInput,
+    HeadNav
   } 
 }
 </script>
