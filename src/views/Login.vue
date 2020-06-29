@@ -77,7 +77,7 @@ export default {
                 localStorage.setItem("jwtToken", response.data.token);
                 const decoded = jwt_decode(response.data.token);
                 console.log(decoded);
-                this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decoded));
+                this.$store.dispatch("isAuthenticated", !this.isEmpty(decoded));
                 this.$store.dispatch("setUser", decoded);
               }
             });

@@ -11,8 +11,14 @@
           label-width="100px"
           class="editForm"
         >
+          <el-form-item label="ID" prop="id">
+            <el-input disabled type="text" v-model="editUser.id" placeholder="名稱"></el-input>
+          </el-form-item>
           <el-form-item label="名稱" prop="name">
             <el-input type="text" v-model="editUser.name" placeholder="名稱"></el-input>
+          </el-form-item>
+          <el-form-item label="Email" prop="email">
+            <el-input disabled type="text" v-model="editUser.email" placeholder="名稱"></el-input>
           </el-form-item>
           <el-form-item label="Description" prop="description">
             <el-input type="text" v-model="editUser.description" placeholder="Description"></el-input>
@@ -36,6 +42,7 @@ export default {
         name: "",
         description: "",
         id : "",
+        email : "",
       },
       rules: {
         name: [
@@ -48,6 +55,7 @@ export default {
         ],
         description: [],
         id: [],
+        email: [],
       }
     };
   },
@@ -57,8 +65,7 @@ export default {
       .get("/api/users/current", this.loginUser)
       .then(response => {
         console.log(response);
-        this.editUser.name = response.data.name;
-        this.editUser.description = response.data.description;
+        this.editUser = response.data;
         this.editUser.id = response.data._id;
       });
   },

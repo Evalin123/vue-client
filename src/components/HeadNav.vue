@@ -9,10 +9,11 @@
       </el-col>
       <el-col :span="6" class="user">
         <div class="userInfo">
-          <router-link to="/login">Login</router-link>
-          <router-link to="/register">Register</router-link>
-          <div class="welcome" v-if="isAutnenticated">
+          <div class="welcome" v-if="isLogin">
             <p class="name">歡迎 {{user.name}}</p>
+          </div>
+          <div class="welcome" v-else>
+            <p class="name">尚未登入</p>
           </div>
           <span>
             <el-dropdown @command="handleCommand">
@@ -21,10 +22,11 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="Home">Home</el-dropdown-item>
+                <el-dropdown-item command="Home" v-show="isLogin">Home</el-dropdown-item>
                 <el-dropdown-item command="register">Register</el-dropdown-item>
                 <el-dropdown-item command="login">Login</el-dropdown-item>
-                <el-dropdown-item command="logout">Logout</el-dropdown-item>
+                <el-dropdown-item command="logout" v-show="isLogin">Logout</el-dropdown-item>
+                <el-dropdown-item command="edit" v-show="isLogin">Edit</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </span>
@@ -36,6 +38,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isLogin : false,
+    }
+  },
   methods: {
     handleCommand(command) {
       this.$message("click on item " + command);
@@ -55,13 +62,15 @@ export default {
       location.reload();
     }
   },
+  created : function() {
+    this.isLogin = this.$store.getters.isAuthenticated;
+  },
   computed: {
     user() {
-      console.log("user" + this.$store.getters.user)
       return this.$store.getters.user;
     },
-    isAutnenticated() {
-      return this.$store.getters.isAutnenticated;
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     }
   }
 };
@@ -93,15 +102,7 @@ export default {
 .user {
   line-height: 60px;
   float: right;
-  /* text-align: right; */
-}
-.user a {
-  color: #fff;
-  text-decoration: none;
-  padding: 5px;
-  margin: 5px;
-  border-width: 1px;
-  border-style: solid;
+  text-align: right;
 }
 .name {
   font-size: 12px;

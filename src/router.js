@@ -7,6 +7,7 @@ import Register from './views/Register.vue'
 import Login from './views/Login.vue'
 import Page404 from './views/404.vue'
 import EditUser from './views/EditUser'
+import ShowInfo from './views/ShowInfo'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ const router = new Router({
       path : '/edit/',
       name :'edit',
       component : EditUser
+    },
+    {
+      path : '/showinfo',
+      name :'showinfo',
+      component : ShowInfo
     },
     {
       path : '*',
