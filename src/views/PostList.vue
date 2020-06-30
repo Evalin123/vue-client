@@ -7,7 +7,7 @@
       <el-table-column prop="operation">
         <template slot-scope="scope">
           <el-button type="warning" icon="edit" @click="editPost(scope.row)">編輯</el-button>
-          <el-button>刪除</el-button>
+          <el-button type="danger" icon="delete" @click="deletePost(scope.row)">刪除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -57,6 +57,15 @@ export default {
     editPost(row) {
       const id = row._id;
       this.$router.push("/editpost/" + id);
+    },
+    deletePost(row) {
+      const id = row._id;
+      this.$axios
+      .delete("/api/posts/delete/" + id)
+      .then(response => {
+        console.log(response);
+        this.$message({ message: response.data.message, type: "success" });
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
