@@ -16,38 +16,32 @@
 
 <script>
 export default {
-  name : "postList",
-  components : {},
+  name: "postList",
+  components: {},
   data() {
     return {
       postList: [],
     };
   },
-  created : function() {
-    const postId = this.$route.params.id
-    console.log("created");
-    this.$axios
-      .get("/api/posts")
-      .then(response => {
-        console.log(response);
-        this.postList = response.data;
-      });
+  created: function() {
+    this.getPost();
   },
   methods: {
     submitForm(formName) {
       console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$axios
-            .post('/api/posts/create', this.addPost)
-            .then(response => {
-              console.log(response);
-              if (response.data.status == "error") {
-                this.$message({ message: response.data.message, type: "error" });
-              } else {
-                this.$message({ message: response.data.message, type: "success" });
-              }
-            });
+          this.$axios.post("/api/posts/create", this.addPost).then(response => {
+            console.log(response);
+            if (response.data.status == "error") {
+              this.$message({ message: response.data.message, type: "error" });
+            } else {
+              this.$message({
+                message: response.data.message,
+                type: "success"
+              });
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -60,18 +54,31 @@ export default {
     },
     deletePost(row) {
       const id = row._id;
-      this.$axios
-      .delete("/api/posts/delete/" + id)
-      .then(response => {
+      this.$confirm('确认刪除？')
+      .then(cfm => {
+        console.log(cfm);
+        this.$axios.delete("/api/posts/delete/" + id).then(response => {
         console.log(response);
         this.$message({ message: response.data.message, type: "success" });
-      });
+        this.getPost();
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    getPost() {
+      console.log("created");
+      this.$axios.get("/api/posts").then(response => {
+      console.log(response);
+      this.postList = response.data;
+    });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
   }
-}
+};
 </script>
 
 <style scoped>
