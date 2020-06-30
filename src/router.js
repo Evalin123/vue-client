@@ -8,6 +8,9 @@ import Login from './views/Login.vue'
 import Page404 from './views/404.vue'
 import EditUser from './views/EditUser'
 import ShowInfo from './views/ShowInfo'
+import AddPost from './views/AddPost'
+import EditPost from './views/EditPost'
+import PostList from './views/PostList'
 
 Vue.use(Router)
 
@@ -36,7 +39,7 @@ const router = new Router({
       component : Login
     },
     {
-      path : '/edit/',
+      path : '/edit',
       name :'edit',
       component : EditUser
     },
@@ -44,6 +47,21 @@ const router = new Router({
       path : '/showinfo',
       name :'showinfo',
       component : ShowInfo
+    },
+    {
+      path : '/addpost',
+      name :'addpost',
+      component : AddPost
+    },
+    {
+      path : '/editpost/:id',
+      name :'edit',
+      component : EditPost
+    },
+    {
+      path : '/postlist',
+      name :'postlist',
+      component : PostList
     },
     {
       path : '*',

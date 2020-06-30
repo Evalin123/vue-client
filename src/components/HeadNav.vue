@@ -16,7 +16,7 @@
             <p class="name">尚未登入</p>
           </div>
           <span>
-            <el-dropdown @command="handleCommand">
+            <el-dropdown @command="dropdownClick">
               <span class="el-dropdown-link">
                 下拉菜单
                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    handleCommand(command) {
+    dropdownClick(command) {
       this.$message("click on item " + command);
       switch (command) {
         case "Home":

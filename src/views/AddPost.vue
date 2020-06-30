@@ -1,30 +1,24 @@
 <template>
-  <div class="edit">
+  <div class="addPost">
     <section class="form_container">
       <div class="manage_tip">
-        <span class="title">個人資訊</span>
+        <span class="title">新增網誌</span>
         <el-form
-          :model="editUser"
+          :model="addPost"
           status-icon
           :rules="rules"
-          ref="editForm"
+          ref="addPostForm"
           label-width="100px"
-          class="editForm"
+          class="addPostForm"
         >
-          <el-form-item label="ID" prop="id">
-            <el-input disabled type="text" v-model="editUser.id" placeholder="名稱"></el-input>
+          <el-form-item label="標題" prop="title">
+            <el-input type="text" v-model="addPost.title" placeholder="標題"></el-input>
           </el-form-item>
-          <el-form-item label="名稱" prop="name">
-            <el-input type="text" v-model="editUser.name" placeholder="名稱"></el-input>
-          </el-form-item>
-          <el-form-item label="Email" prop="email">
-            <el-input disabled type="text" v-model="editUser.email" placeholder="名稱"></el-input>
-          </el-form-item>
-          <el-form-item label="Description" prop="description">
-            <el-input type="text" v-model="editUser.description" placeholder="Description"></el-input>
+          <el-form-item label="內容" prop="content">
+            <el-input type="textarea" v-model="addPost.content" placeholder="內容"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="submitForm('editForm')">Submit</el-button>
+            <el-button type="primary" class="submit_btn" @click="submitForm('addPostForm')">Submit</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -38,36 +32,21 @@ export default {
   components : {},
   data() {
     return {
-      editUser: {
-        name: "",
-        description: "",
-        id : "",
-        email : "",
+      addPost: {
+        title: "",
+        content: "",
       },
       rules: {
-        name: [
+        title: [
           {
             required: true,
             message: "不能為空",
             trigger: "blur"
           },
-          { min: 2, max: 8, message: "字數錯誤", trigger: "blur" }
         ],
-        description: [],
-        id: [],
-        email: [],
+        content: [],
       }
     };
-  },
-  created : function() {
-    console.log("mounted");
-    this.$axios
-      .get("/api/users/current", this.loginUser)
-      .then(response => {
-        console.log(response);
-        this.editUser = response.data;
-        this.editUser.id = response.data._id;
-      });
   },
   methods: {
     submitForm(formName) {
@@ -75,11 +54,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
-            .post('/api/users/edit/' + this.editUser.id + '/', this.editUser)
+            .post('/api/posts/create', this.addPost)
             .then(response => {
               console.log(response);
               if (response.data.status == "error") {
-                this.$message({ message: response.data.msg, type: "error" });
+                this.$message({ message: response.data.message, type: "error" });
               } else {
                 this.$message({ message: response.data.message, type: "success" });
               }
@@ -98,7 +77,7 @@ export default {
 </script>
 
 <style scoped>
-.editUser {
+.addPost {
   position: relative;
   width: 100%;
   height: 100%;
@@ -122,7 +101,7 @@ export default {
   color: #fff;
 }
 
-.editForm {
+.addPostForm {
   margin-top: 20px;
   background-color: #fff;
   padding: 20px 40px 20px 20px;
