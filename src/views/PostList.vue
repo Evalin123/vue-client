@@ -1,27 +1,40 @@
 <template>
   <div class="table_container">
-    <el-table :data="tableData">
-      <el-table-column type="index" label="序號"></el-table-column>
-      <el-table-column prop="_id" label="id"></el-table-column>
-      <el-table-column prop="title" label="標題"></el-table-column>
-      <el-table-column prop="operation">
-        <template slot-scope="scope">
-          <el-button type="warning" icon="edit" @click="editPost(scope.row)">編輯</el-button>
-          <el-button type="danger" icon="delete" @click="deletePost(scope.row)">刪除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="block">
-      <span class="demonstration">完整功能</span>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="paginations.pageIndex"
-        :page-sizes="paginations.pageSizes"
-        :page-size="paginations.pageSize"
-        :layout="paginations.layout"
-        :total="paginations.total"
-      ></el-pagination>
+    <el-form>
+      <el-form-item label="文章內容" prop="content">
+            <el-input type="text" v-model="content" placeholder="文章內容"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="submit_btn" @click="search()">查詢</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="submit_btn" @click="reset()">重置</el-button>
+          </el-form-item>
+    </el-form>
+    <div>
+      <el-table :data="tableData">
+        <el-table-column type="index" label="序號"></el-table-column>
+        <el-table-column prop="_id" label="id"></el-table-column>
+        <el-table-column prop="title" label="標題"></el-table-column>
+        <el-table-column prop="operation">
+          <template slot-scope="scope">
+            <el-button type="warning" icon="edit" @click="editPost(scope.row)">編輯</el-button>
+            <el-button type="danger" icon="delete" @click="deletePost(scope.row)">刪除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block">
+        <span class="demonstration">完整功能</span>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="paginations.pageIndex"
+          :page-sizes="paginations.pageSizes"
+          :page-size="paginations.pageSize"
+          :layout="paginations.layout"
+          :total="paginations.total"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -34,40 +47,21 @@ export default {
     return {
       postList: [],
       tableData: [],
+      tmpData: [],
+      content: "",
       paginations: {
-        pageIndex : 1,
-        total : 0,
-        pageSize : 5,
-        pageSizes : [5, 10, 15, 20], 
-        layout : "total, sizes, prev, pager, next, jumper",
-      },
+        pageIndex: 1,
+        total: 0,
+        pageSize: 5,
+        pageSizes: [5, 10, 15, 20],
+        layout: "total, sizes, prev, pager, next, jumper"
+      }
     };
   },
   created: function() {
     this.getPost();
   },
   methods: {
-    submitForm(formName) {
-      console.log(formName);
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$axios.post("/api/posts/create", this.addPost).then(response => {
-            console.log(response);
-            if (response.data.status == "error") {
-              this.$message({ message: response.data.message, type: "error" });
-            } else {
-              this.$message({
-                message: response.data.message,
-                type: "success"
-              });
-            }
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
     editPost(row) {
       const id = row._id;
       this.$router.push("/editpost/" + id);
@@ -92,34 +86,45 @@ export default {
       this.$axios.get("/api/posts").then(response => {
         console.log(response);
         this.postList = response.data;
+        this.tmpData = response.data;
         this.setPagination();
-      
       });
     },
     setPagination() {
-      this.paginations.total = this.postList.length;
+      this.paginations.total = this.tmpData.length;
       this.paginations.pageIndex = 1;
       this.paginations.pageSize = 5;
-      this.tableData = this.postList.filter((item, index) => {
+      this.tableData = this.tmpData.filter((item, index) => {
         return index < this.paginations.pageSize;
       });
-
     },
     handleSizeChange(size) {
       this.paginations.pageIndex = 1;
       this.paginations.pageSize = size;
-      this.tableData = this.postList.filter((item, index) => {
+      this.tableData = this.tmpData.filter((item, index) => {
         return index < this.paginations.pageSize;
       });
     },
     handleCurrentChange(page) {
-      let start = this.paginations.pageSize*(page-1);
-      this.tableData = this.postList.filter((item, index) => {
-        return (index >= start && index < this.paginations.pageSize + start);
+      let start = this.paginations.pageSize * (page - 1);
+      this.tableData = this.tmpData.filter((item, index) => {
+        return index >= start && index < this.paginations.pageSize + start;
       });
       // this.tableData = table.filter((item, index) => {
       //   return index < this.paginations.pageSize;
       // }) ;
+    },
+    search() {
+      let content = this.content;
+      let searchTable = this.postList.filter((item, index) => {
+        return item.content == content;
+      })
+      this.tmpData = searchTable;
+      this.setPagination();
+    },
+    reset() {
+      this.tmpData = this.postList;
+      this.setPagination();
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
