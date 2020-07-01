@@ -1,6 +1,6 @@
 <template>
   <header class="head-nav">
-    <el-row>
+    <el-row class="fixed">
       <el-col :span="6" class="logo-container">
         <router-link to="/">
           <img src="../assets/logo.png" alt class="logo" />
@@ -84,6 +84,8 @@ export default {
   background: #324057;
   color: #fff;
   border-bottom: 1px solid #1f2d3d;
+  position: fixed;
+  z-index: 10;
 }
 .logo-container {
   line-height: 60px;

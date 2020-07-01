@@ -2,14 +2,12 @@
   <div class="table_container">
     <el-form>
       <el-form-item label="文章內容" prop="content">
-            <el-input type="text" v-model="content" placeholder="文章內容"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="search()">查詢</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="reset()">重置</el-button>
-          </el-form-item>
+        <el-input type="text" v-model="content" placeholder="文章內容"></el-input>
+      </el-form-item>
+      <el-row>
+        <el-button type="primary" size="small" @click="search()">查詢</el-button>
+        <el-button type="primary" size="small" @click="reset()">重置</el-button>
+      </el-row>
     </el-form>
     <div>
       <el-table :data="tableData">
@@ -117,8 +115,8 @@ export default {
     search() {
       let content = this.content;
       let searchTable = this.postList.filter((item, index) => {
-        return item.content == content;
-      })
+        return item.content.indexOf(content) > -1;
+      });
       this.tmpData = searchTable;
       this.setPagination();
     },

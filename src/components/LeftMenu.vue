@@ -37,12 +37,6 @@
               <span slot="title">登入</span>
             </el-menu-item>
           </router-link>
-          <router-link to="/logout">
-            <el-menu-item index="1-4">
-              <i class="fa fa-margin fa-sign-out"></i>
-              <span slot="title">登出</span>
-            </el-menu-item>
-          </router-link>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">

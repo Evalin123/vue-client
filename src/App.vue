@@ -65,6 +65,7 @@ body,
 }
 .content {
   position: relative;
+  top:62px;
   left:180px;
 }
 </style>
