@@ -61,6 +61,8 @@ export default {
                 this.$message({ message: response.data.message, type: "error" });
               } else {
                 this.$message({ message: response.data.message, type: "success" });
+                this.addPost.title = "";
+                this.addPost.content = "";
               }
             });
         } else {
@@ -89,7 +91,7 @@ export default {
   height: 210px;
   position: absolute;
   top: 10%;
-  left: 34%;
+  left: 30%;
   padding: 25px;
   border-radius: 5px;
   text-align: center;

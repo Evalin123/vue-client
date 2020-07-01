@@ -1,6 +1,6 @@
 <template>
   <div class="table_container">
-    <el-table :data="postList">
+    <el-table :data="tableData">
       <el-table-column type="index" label="序號"></el-table-column>
       <el-table-column prop="_id" label="id"></el-table-column>
       <el-table-column prop="title" label="標題"></el-table-column>
@@ -11,6 +11,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="block">
+      <span class="demonstration">完整功能</span>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="paginations.pageIndex"
+        :page-sizes="paginations.pageSizes"
+        :page-size="paginations.pageSize"
+        :layout="paginations.layout"
+        :total="paginations.total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -21,6 +33,14 @@ export default {
   data() {
     return {
       postList: [],
+      tableData: [],
+      paginations: {
+        pageIndex : 1,
+        total : 0,
+        pageSize : 5,
+        pageSizes : [5, 10, 15, 20], 
+        layout : "total, sizes, prev, pager, next, jumper",
+      },
     };
   },
   created: function() {
@@ -54,25 +74,52 @@ export default {
     },
     deletePost(row) {
       const id = row._id;
-      this.$confirm('确认刪除？')
-      .then(cfm => {
-        console.log(cfm);
-        this.$axios.delete("/api/posts/delete/" + id).then(response => {
-        console.log(response);
-        this.$message({ message: response.data.message, type: "success" });
-        this.getPost();
+      this.$confirm("确认刪除？")
+        .then(cfm => {
+          console.log(cfm);
+          this.$axios.delete("/api/posts/delete/" + id).then(response => {
+            console.log(response);
+            this.$message({ message: response.data.message, type: "success" });
+            this.getPost();
+          });
+        })
+        .catch(err => {
+          console.log(err);
         });
-      })
-      .catch(err => {
-        console.log(err);
-      })
     },
     getPost() {
       console.log("created");
       this.$axios.get("/api/posts").then(response => {
-      console.log(response);
-      this.postList = response.data;
-    });
+        console.log(response);
+        this.postList = response.data;
+        this.setPagination();
+      
+      });
+    },
+    setPagination() {
+      this.paginations.total = this.postList.length;
+      this.paginations.pageIndex = 1;
+      this.paginations.pageSize = 5;
+      this.tableData = this.postList.filter((item, index) => {
+        return index < this.paginations.pageSize;
+      });
+
+    },
+    handleSizeChange(size) {
+      this.paginations.pageIndex = 1;
+      this.paginations.pageSize = size;
+      this.tableData = this.postList.filter((item, index) => {
+        return index < this.paginations.pageSize;
+      });
+    },
+    handleCurrentChange(page) {
+      let start = this.paginations.pageSize*(page-1);
+      this.tableData = this.postList.filter((item, index) => {
+        return (index >= start && index < this.paginations.pageSize + start);
+      });
+      // this.tableData = table.filter((item, index) => {
+      //   return index < this.paginations.pageSize;
+      // }) ;
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
